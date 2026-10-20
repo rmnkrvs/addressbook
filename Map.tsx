@@ -10,6 +10,7 @@ import {
     Card,
     useTheme,
 } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 
 import { RootStackScreenProps } from './types';
@@ -50,35 +51,16 @@ export default function MapScreen({ route }: RootStackScreenProps<'Map'>) {
 </html>`;
 
     return (
-        <View style={styles.container}>
+        <View style={{ flex: 1 }}>
 
-            <View style={styles.info}>
-                <Text variant='titleLarge'>{address}</Text>
-                <Text>Latitude: {latitude}</Text>
-                <Text>Longitude: {longitude}</Text>
-            </View>
-
-            <WebView
-                style={styles.map}
-                originWhitelist={['*']}
-                source={{ html, baseUrl: 'https://localhost' }}
-            />
+            <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
+                <WebView
+                    style={{ flex: 1 }}
+                    originWhitelist={['*']}
+                    source={{ html, baseUrl: 'https://localhost' }}
+                />
+            </SafeAreaView>
 
         </View>
     );
-
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        gap: 8,
-    },
-    map: {
-        flex: 1,
-    },
-    info: {
-
-    },
-});

@@ -38,7 +38,7 @@ export default function App() {
 
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Places" component={PlacesScreen} />
+          <Stack.Screen name="Places" component={PlacesScreen} options={{ title: 'My Places' }} />
           <Stack.Screen name="Map" component={MapScreen} />
         </Stack.Navigator>
       </NavigationContainer>
