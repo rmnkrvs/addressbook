@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, StatusBar } from 'react-native';
 import {
     TextInput,
     Button,
@@ -10,15 +10,19 @@ import {
     Card,
     useTheme,
 } from 'react-native-paper';
-import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
 
-import * as SQLite from 'expo-sqlite';
+import { RootStackScreenProps } from './types';
 
-export default function MapScreen() {
+export default function MapScreen({ route }: RootStackScreenProps<'Map'>) {
+
+    const { address, latitude, longitude } = route.params;
 
     return (
         <View style={styles.container}>
-            <Text>Map</Text>
+
+            <Text variant='titleLarge'>{address}</Text>
+            <Text>Latitude: {latitude}</Text>
+            <Text>Longitude: {longitude}</Text>
         </View>
     );
 
@@ -27,5 +31,7 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding: 16,
+        gap: 8,
     },
 });
