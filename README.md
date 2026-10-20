@@ -1,2 +1,1 @@
-![App view](./assets/screenshot1.jpeg)
-![App view](./assets/screenshot2.jpeg)
+<img src="./assets/screenshot1.jpeg" width="300" /> <img src="./assets/screenshot2.jpeg" width="300" />
