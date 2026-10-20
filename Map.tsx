@@ -1,15 +1,3 @@
-import { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, StatusBar } from 'react-native';
-import {
-    TextInput,
-    Button,
-    List,
-    IconButton,
-    Divider,
-    Text,
-    Card,
-    useTheme,
-} from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 
@@ -51,7 +39,6 @@ export default function MapScreen({ route }: RootStackScreenProps<'Map'>) {
 </html>`;
 
     return (
-        <View style={{ flex: 1 }}>
 
             <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
                 <WebView
@@ -60,7 +47,5 @@ export default function MapScreen({ route }: RootStackScreenProps<'Map'>) {
                     source={{ html, baseUrl: 'https://localhost' }}
                 />
             </SafeAreaView>
-
-        </View>
     );
 }

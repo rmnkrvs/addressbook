@@ -8,11 +8,10 @@ import {
     Text,
     Card,
     useTheme,
+    Icon,
 } from 'react-native-paper';
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
-
 import * as Location from 'expo-location';
-
 import * as SQLite from 'expo-sqlite';
 import { Place, RootStackScreenProps } from './types';
 
@@ -89,33 +88,35 @@ export default function PlacesScreen({ navigation }: RootStackScreenProps<'Place
 
     return (
 
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
 
-            <Text variant='titleLarge'>Placefinder</Text>
+            <Card mode="contained">
+                <Card.Content style={styles.form}>
 
-            <TextInput
-                style={styles.input}
-                mode='outlined'
-                label='address'
-                onChangeText={text => setAddress(text)}
-                value={address}
-                outlineColor="#B0BEC5"
-                activeOutlineColor="#2E7D6B"
-                outlineStyle={{ borderRadius: 12 }}
-            />
+                    <Text variant='titleLarge'>Placefinder</Text>
 
-            <View style={styles.buttons}>
-                <Button
-                    mode='contained'
-                    icon='plus'
-                    onPress={handleSave}
-                    disabled={!address.trim()}
-                >
-                    Save
-                </Button>
-            </View>
+                    <TextInput
+                        style={styles.input}
+                        mode='outlined'
+                        label='address'
+                        onChangeText={text => setAddress(text)}
+                        value={address}
+                        outlineStyle={{ borderRadius: 12 }}
+                    />
 
-            <Card mode='contained' style={styles.card}>
+                    <Button
+                        mode='contained'
+                        icon='plus'
+                        onPress={handleSave}
+                        disabled={!address.trim()}
+                    >
+                        Save
+                    </Button>
+
+                </Card.Content>
+            </Card>
+
+            <Card mode='contained' style={styles.list}>
                 <FlatList
                     data={places}
                     keyExtractor={(item) => item.id.toString()}
@@ -125,6 +126,7 @@ export default function PlacesScreen({ navigation }: RootStackScreenProps<'Place
                     }
                     renderItem={({ item }) => (
                         <List.Item
+                            style={styles.item}
                             title={item.address}
                             titleNumberOfLines={1}
                             onPress={() => navigation.navigate('Map', { address: item.address, latitude: item.latitude, longitude: item.longitude })}
@@ -134,7 +136,11 @@ export default function PlacesScreen({ navigation }: RootStackScreenProps<'Place
                                     <Text style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
                                         show on map
                                     </Text>
-                                    <List.Icon icon="chevron-right" />
+                                    <Icon
+                                        source="chevron-right"
+                                        size={24}
+                                        color={theme.colors.onSurfaceVariant}
+                                    />
                                 </View>
                             )}
                         />
@@ -149,22 +155,19 @@ export default function PlacesScreen({ navigation }: RootStackScreenProps<'Place
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: 30,
-        gap: 10,
+        padding: 16,
+        gap: 16,
     },
-    input: {
-        width: 250,
+    form: {
+        gap: 12,
     },
-    buttons: {
-        width: 250,
-        marginTop: 10,
-    },
-    card: {
+    list: {
         flex: 1,
-        width: '90%',
-        marginTop: 20,
+    },
+    item: {
+        paddingLeft: 4,
+        paddingRight: 8,
     },
     empty: {
         textAlign: 'center',
@@ -173,6 +176,7 @@ const styles = StyleSheet.create({
     right: {
         flexDirection: 'row',
         alignItems: 'center',
+        gap: 2,
     },
     hint: {
         fontSize: 14,

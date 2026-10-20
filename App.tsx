@@ -13,19 +13,20 @@ const theme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,
-    primary: '#2E7D6B',
+    primary: '#1F5F8B',
     onPrimary: '#FFFFFF',
-    primaryContainer: '#BFEBDD',
-    onPrimaryContainer: '#00201A',
-    secondaryContainer: '#CDE8DF',
-    background: '#F7FAF8',
+    primaryContainer: '#CFE5F5',
+    onPrimaryContainer: '#0B2A3F',
+    secondaryContainer: '#DCE8F0',
+    background: '#F4F8FB',
     surface: '#FFFFFF',
-    surfaceVariant: '#DCE8E2',
+    surfaceVariant: '#E3ECF3',
+    outline: '#9FB4C4',
     elevation: {
       ...MD3LightTheme.colors.elevation,
-      level1: '#F1F6F3',
-      level2: '#EAF1ED',
-      level3: '#E3ECE7',
+      level1: '#E8F0F6',
+      level2: '#E1EAF1',
+      level3: '#DAE5ED',
     },
   },
 };
@@ -37,13 +38,19 @@ export default function App() {
     <PaperProvider theme={theme}>
 
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: theme.colors.primary},
+          headerTintColor: theme.colors.onPrimary,
+          headerTitleStyle: { fontWeight: 'bold' },
+        }}
+        >
           <Stack.Screen name="Places" component={PlacesScreen} options={{ title: 'My Places' }} />
           <Stack.Screen name="Map" component={MapScreen} />
         </Stack.Navigator>
       </NavigationContainer>
 
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
 
     </PaperProvider>
   );
