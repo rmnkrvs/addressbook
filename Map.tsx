@@ -1,6 +1,6 @@
- import { useState, useEffect } from 'react';
- import { StyleSheet, View, FlatList } from 'react-native';
- import {
+import { useState, useEffect } from 'react';
+import { StyleSheet, View, FlatList } from 'react-native';
+import {
     TextInput,
     Button,
     List,
@@ -14,7 +14,13 @@ import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
 
 import * as SQLite from 'expo-sqlite';
 
-export default function Map() {
+export default function MapScreen() {
+
+    return (
+        <View style={styles.container}>
+            <Text>Map</Text>
+        </View>
+    );
 
 }
 

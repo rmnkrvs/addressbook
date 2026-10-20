@@ -1,8 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import { Appbar, MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Map from './Map';
-import Places from './Places';
+import MapScreen from './Map';
+import PlacesScreen from './Places';
+import { RootStackParamList } from './types';
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const theme = {
   ...MD3LightTheme,
@@ -26,16 +31,20 @@ const theme = {
 };
 
 export default function App() {
+
   return (
+
     <PaperProvider theme={theme}>
-      <Appbar.Header elevated>
-        <Appbar.Content title="Shopping List" />
-      </Appbar.Header>
 
-      <Map />
-      <Places />
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Places" component={PlacesScreen} />
+          <Stack.Screen name="Map" component={MapScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
 
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
+
     </PaperProvider>
   );
 }
