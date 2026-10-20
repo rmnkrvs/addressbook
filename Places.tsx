@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, Alert } from 'react-native';
 import {
     TextInput,
     Button,
     List,
-    IconButton,
     Divider,
     Text,
     Card,
@@ -12,18 +11,21 @@ import {
 } from 'react-native-paper';
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
 
+import * as Location from 'expo-location';
+
 import * as SQLite from 'expo-sqlite';
-import { Place } from './types';
+import { Place, RootStackScreenProps } from './types';
 
 const db = SQLite.openDatabaseSync('placesdb');
 
-export default function PlacesScreen() {
+export default function PlacesScreen({ navigation }: RootStackScreenProps<'Places'>) {
 
     useDrizzleStudio(db);
 
+    const theme = useTheme();
+
+
     const [address, setAddress] = useState('');
-    const [latitude, setLatitude] = useState<number | null>(null);
-    const [longitude, setLongitude] = useState<number | null>(null);
     const [places, setPlaces] = useState<Place[]>([]);
 
     const initialize = async () => {
@@ -39,11 +41,26 @@ export default function PlacesScreen() {
 
     const handleSave = async () => {
         try {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+
+            if (status !== 'granted') {
+                Alert.alert('Location permission is needed to look up addresses');
+                return;
+            }
+
+            const results = await Location.geocodeAsync(address);
+
+            if (results.length === 0) {
+                Alert.alert('Address not found');
+                return;
+            }
+
+            const { latitude, longitude } = results[0];
+
             await db.runAsync('INSERT INTO places (address, latitude, longitude) VALUES (?, ?, ?)', address, latitude, longitude);
             setAddress('');
-            setLatitude(null);
-            setLongitude(null);
             handleFetch();
+
         } catch (error) {
             console.error('Could not add item', error);
         }
@@ -92,10 +109,38 @@ export default function PlacesScreen() {
                     mode='contained'
                     icon='plus'
                     onPress={handleSave}
+                    disabled={!address.trim()}
                 >
-                    Add
+                    Save
                 </Button>
             </View>
+
+            <Card mode='contained' style={styles.card}>
+                <FlatList
+                    data={places}
+                    keyExtractor={(item) => item.id.toString()}
+                    ItemSeparatorComponent={Divider}
+                    ListEmptyComponent={
+                        <Text style={styles.empty}>No saved places yet</Text>
+                    }
+                    renderItem={({ item }) => (
+                        <List.Item
+                            title={item.address}
+                            titleNumberOfLines={1}
+                            onPress={() => navigation.navigate('Map', { address: item.address, latitude: item.latitude, longitude: item.longitude })}
+                            onLongPress={() => handleDelete(item.id)}
+                            right={() => (
+                                <View style={styles.right}>
+                                    <Text style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
+                                        show on map
+                                    </Text>
+                                    <List.Icon icon="chevron-right" />
+                                </View>
+                            )}
+                        />
+                    )}
+                />
+            </Card>
 
         </View>
     );
@@ -124,5 +169,12 @@ const styles = StyleSheet.create({
     empty: {
         textAlign: 'center',
         margin: 24,
+    },
+    right: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    hint: {
+        fontSize: 14,
     },
 });
